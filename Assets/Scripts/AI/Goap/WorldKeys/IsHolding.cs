@@ -4,7 +4,5 @@ using Interfaces;
 namespace AI.GOAP.WorldKeys
 {
     public class IsHolding<THoldable> : WorldKeyBase
-        where THoldable : IHoldable
-    {
-    }
+        where THoldable : IHoldable {}
 }

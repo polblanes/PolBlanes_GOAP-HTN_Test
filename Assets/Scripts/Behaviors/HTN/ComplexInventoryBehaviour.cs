@@ -35,7 +35,9 @@ namespace Behaviours.HTN
             if (this.items.Contains(item))
                 return;
 
+            item.gameObject.transform.parent = this.transform;
             this.items.Add(item);
+            item.Claim();
             OnItemAdded?.Invoke(item);
         }
         
@@ -60,6 +62,7 @@ namespace Behaviours.HTN
             where T : ItemBase
         {
             this.items.Remove(item);
+            item.Drop();
             
             if (!item.IsDestroyed && item != null && item.gameObject != null)
             {

@@ -5,12 +5,12 @@ using AI;
 
 using HTN.Sensors;
 using Interfaces.HTN;
+using FluidHTN;
 
 namespace HTN
 {
-    public partial class AIContext
+    public partial class AIAgentContext
     {
-        public AIAgent Agent { get; }
         public AISenses Senses { get; }
         public Transform Head { get; }
 
@@ -34,7 +34,7 @@ namespace HTN
         /// </summary>
         public bool CanSense { get; set; }
 
-        public AIContext(AIAgent agent, AISenses senses, Transform head, Animator animator, NavMeshAgent navAgent)
+        public AIAgentContext(AIAgent agent, AISenses senses, Transform head, Animator animator, NavMeshAgent navAgent)
         {
             Agent = agent;
             Senses = senses;

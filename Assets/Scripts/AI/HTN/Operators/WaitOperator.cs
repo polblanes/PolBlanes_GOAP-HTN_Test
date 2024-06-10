@@ -13,7 +13,7 @@ namespace HTN.Operators
 
         public TaskStatus Update(IContext ctx)
         {
-            if (ctx is AIContext c)
+            if (ctx is AIAgentContext c)
             {
                 if (c.GenericTimer <= 0f)
                 {
@@ -35,7 +35,7 @@ namespace HTN.Operators
 
         public void Stop(IContext ctx)
         {
-            if (ctx is AIContext c)
+            if (ctx is AIAgentContext c)
             {
                 c.GenericTimer = -1f;
             }

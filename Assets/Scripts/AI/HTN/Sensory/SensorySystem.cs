@@ -14,7 +14,7 @@ namespace HTN.Sensors
             _sensors = agent.transform.GetComponents<ISensor>();
         }
 
-        public void Tick(AIContext context)
+        public void Tick(AIAgentContext context)
         {
             foreach (var sensor in _sensors)
             {
@@ -26,7 +26,7 @@ namespace HTN.Sensors
             }
         }
 
-        public void DrawGizmos(AIContext context)
+        public void DrawGizmos(AIAgentContext context)
         {
             foreach (var sensor in _sensors)
             {

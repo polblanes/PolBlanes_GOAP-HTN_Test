@@ -20,64 +20,48 @@ namespace AI.GOAP.Factories
             #endregion
 
             #region Goals
-            builder.AddWanderGoal();
-            
-            builder.AddCreateItemGoal<Axe>();
-            builder.AddCreateItemGoal<Pickaxe>();
+            builder.AddWanderGoal();            
             builder.AddFixHungerGoal();
-
             builder.AddPickupItemGoal<Axe>();
-            builder.AddGatherItemGoal<Wood>();
             builder.AddPickupItemGoal<Pickaxe>();
-            builder.AddGatherItemGoal<Iron>();            
             #endregion
 
             #region Actions
             builder.AddWanderAction();
-
             builder.AddPickupItemAction<Iron>();
             builder.AddPickupItemAction<Wood>();
             builder.AddPickupItemAction<Pickaxe>();
             builder.AddPickupItemAction<Axe>();
-            builder.AddPickupItemAction<IEatable>();
-            
+            builder.AddPickupItemAction<IEatable>();            
             builder.AddCreateItemAction<Pickaxe>();
             builder.AddCreateItemAction<Axe>();
-
             builder.AddGatherItemAction<Iron, Pickaxe>();
             builder.AddGatherItemSlowAction<Iron>();
-
             builder.AddGatherItemAction<Wood, Axe>();
             builder.AddGatherItemSlowAction<Wood>();
-
             builder.AddEatAction();
             #endregion
             
             #region TargetSensors
             builder.AddWanderTargetSensor();
-            builder.AddTransformTargetSensor();
-            
+            builder.AddTransformTargetSensor();            
             builder.AddClosestItemTargetSensor<IEatable>();
             builder.AddClosestItemTargetSensor<Iron>();
             builder.AddClosestItemTargetSensor<Pickaxe>();
             builder.AddClosestItemTargetSensor<Wood>();
-            builder.AddClosestItemTargetSensor<Axe>();
-            
+            builder.AddClosestItemTargetSensor<Axe>();            
             builder.AddClosestSourceTargetSensor<Iron>();
-            builder.AddClosestSourceTargetSensor<Wood>();
-            
+            builder.AddClosestSourceTargetSensor<Wood>();            
             builder.AddClosestObjectTargetSensor<AnvilSource>();
             #endregion
             
             #region WorldSensors
             builder.AddItemOnFloorSensor();
-
             builder.AddIsHoldingSensor<IEatable>();            
             builder.AddIsHoldingSensor<Pickaxe>();
             builder.AddIsHoldingSensor<Iron>();
             builder.AddIsHoldingSensor<Axe>();
-            builder.AddIsHoldingSensor<Wood>();
-            
+            builder.AddIsHoldingSensor<Wood>();            
             builder.AddIsInWorldSensor<IEatable>();
             builder.AddIsInWorldSensor<Pickaxe>();
             builder.AddIsInWorldSensor<Iron>();            

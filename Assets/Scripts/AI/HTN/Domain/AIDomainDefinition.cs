@@ -7,6 +7,6 @@ namespace HTN.Domain
 {
     public abstract class AIDomainDefinition : ScriptableObject
     {
-        public abstract Domain<AIContext> Create();
+        public abstract Domain<AIAgentContext> Create();
     }
 }

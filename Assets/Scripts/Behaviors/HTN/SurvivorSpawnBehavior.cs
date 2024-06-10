@@ -14,6 +14,8 @@ namespace Behaviours.HTN
         [SerializeField]
         private GameObject agentPrefab;
 
+        public int agentAmount;
+
         public Color agentColor;
 
         private void Awake()
@@ -23,7 +25,10 @@ namespace Behaviours.HTN
 
         private void Start()
         {
-            this.SpawnAgent(SetIds.Survivor, this.agentColor);
+            for (int agentsToSpawn = agentAmount; agentsToSpawn > 0; agentsToSpawn--)
+            {
+                this.SpawnAgent(SetIds.Survivor, this.agentColor);
+            }
         }
 
         private void SpawnAgent(string setId, Color color)

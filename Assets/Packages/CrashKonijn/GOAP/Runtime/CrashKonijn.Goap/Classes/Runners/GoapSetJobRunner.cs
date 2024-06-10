@@ -53,6 +53,8 @@ namespace CrashKonijn.Goap.Classes.Runners
             if (agent.CurrentGoal == null)
                 return;
 
+            agent.OnGoapRunnerPlanningStarted();
+
             var localData = this.goapSet.SensorRunner.SenseLocal(globalData, agent);
 
             if (this.IsGoalCompleted(localData, agent))
@@ -60,8 +62,11 @@ namespace CrashKonijn.Goap.Classes.Runners
                 var goal = agent.CurrentGoal;
                 agent.ClearGoal();
                 agent.Events.GoalCompleted(goal);
+                agent.OnGoapRunnerGoalComplete();
                 return;
             }
+
+            agent.OnGoapRunnerReplan();
 
             this.FillBuilders(localData, agent);
             
@@ -76,7 +81,7 @@ namespace CrashKonijn.Goap.Classes.Runners
                     ConditionsMet = new NativeArray<bool>(this.conditionBuilder.Build(), Allocator.TempJob),
                     DistanceMultiplier = agent.DistanceMultiplier
                 })
-            });
+            });            
         }
 
         private void FillBuilders(LocalWorldData localData, IMonoAgent agent)
@@ -130,6 +135,8 @@ namespace CrashKonijn.Goap.Classes.Runners
 
                 if (resolveHandle.Agent.IsNull())
                     continue;
+                
+                resolveHandle.Agent.OnGoapRunnerNewPlan(result);
                 
                 var action = result.FirstOrDefault();
                 

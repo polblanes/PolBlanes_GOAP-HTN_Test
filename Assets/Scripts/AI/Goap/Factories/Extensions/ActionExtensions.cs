@@ -53,7 +53,8 @@ namespace AI.GOAP.Factories.Extensions
         {
             var action = builder.AddAction<Actions.CreateItem<T>>()
                 .SetTarget<ClosestTarget<AnvilSource>>()
-                .AddEffect<CreatedItem<T>>(EffectType.Increase);
+                .AddEffect<CreatedItem<T>>(EffectType.Increase)
+                .AddEffect<IsInWorld<T>>(EffectType.Increase);
             
             if (typeof(T) == typeof(Axe))
             {

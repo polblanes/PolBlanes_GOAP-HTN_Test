@@ -14,6 +14,13 @@ namespace AI.GOAP.Factories.Extensions
                 .AddCondition<IsWandering>(Comparison.GreaterThanOrEqual, 1);
         }
 
+        public static void AddPickupItemGoal<T>(this GoapSetBuilder builder)
+            where T : IHoldable
+        {
+            builder.AddGoal<PickupItemGoal<T>>()
+                .AddCondition<IsHolding<T>>(Comparison.GreaterThanOrEqual, 1);
+        }
+
         public static void AddCreateItemGoal<T>(this GoapSetBuilder builder)
             where T : ICreatable
         {
@@ -38,13 +45,6 @@ namespace AI.GOAP.Factories.Extensions
         {
             builder.AddGoal<GatherItemGoal<T>>()
                 .AddCondition<IsInWorld<T>>(Comparison.GreaterThanOrEqual, 999);
-        }
-        
-        public static void AddPickupItemGoal<T>(this GoapSetBuilder builder)
-            where T : IHoldable
-        {
-            builder.AddGoal<PickupItemGoal<T>>()
-                .AddCondition<IsHolding<T>>(Comparison.GreaterThanOrEqual, 1);
-        }
+        }        
     }
 }

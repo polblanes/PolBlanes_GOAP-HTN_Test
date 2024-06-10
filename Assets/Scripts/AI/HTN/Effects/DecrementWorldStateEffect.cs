@@ -28,7 +28,7 @@ namespace HTN.Effects
 
         public void Apply(IContext ctx)
         {
-            if (ctx is AIContext c)
+            if (ctx is AIAgentContext c)
             {
                 var currentValue = c.GetState(State);
                 byte AmountToDecrement = Value;

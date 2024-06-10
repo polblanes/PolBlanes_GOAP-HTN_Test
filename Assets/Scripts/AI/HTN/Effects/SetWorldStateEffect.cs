@@ -36,7 +36,7 @@ namespace HTN.Effects
 
         public void Apply(IContext ctx)
         {
-            if (ctx is AIContext c)
+            if (ctx is AIAgentContext c)
             {
                 if (ctx.LogDecomposition) ctx.Log(Name, $"SetWorldStateEffect.Apply({State}:{Value}:{Type})", ctx.CurrentDecompositionDepth+1, this);
                 c.SetState(State, Value, Type);

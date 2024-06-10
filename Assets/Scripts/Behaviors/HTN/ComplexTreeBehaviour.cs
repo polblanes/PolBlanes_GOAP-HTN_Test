@@ -14,6 +14,8 @@ namespace Behaviours.HTN
         private ItemCollection itemCollection;
         private ItemFactory itemFactory;
 
+        int AgentAmount = 0;
+
         private void Awake()
         {
             this.itemCollection = FindObjectOfType<ItemCollection>();
@@ -22,6 +24,11 @@ namespace Behaviours.HTN
 
         private void Start()
         {
+            SurvivorSpawnBehavior spawner = FindObjectOfType<SurvivorSpawnBehavior>();
+            if (spawner != null)
+            {
+                AgentAmount = spawner.agentAmount;
+            }
             this.DropApple();
         }
 
@@ -35,7 +42,7 @@ namespace Behaviours.HTN
 
             var count = this.itemCollection.All().Count(x => x is IEatable);
 
-            if (count > 4)
+            if (count > AgentAmount * 2.0f)
                 return;
             
             this.apple = null;
@@ -44,7 +51,7 @@ namespace Behaviours.HTN
 
         private IEnumerator GrowApple()
         {
-            yield return new WaitForSeconds(10f);
+            yield return new WaitForSeconds(3f);
             this.DropApple();
         }
 

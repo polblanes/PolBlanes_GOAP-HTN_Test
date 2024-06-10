@@ -12,7 +12,6 @@ namespace HTN.Operators
         where T : MonoBehaviour
     {
         protected T[] collection;
-        bool bInitialized = false;
 
         public virtual void GetCollection() 
         {
@@ -26,13 +25,10 @@ namespace HTN.Operators
 
         public ITarget GetClosest(IContext ctx)
         {
-            if (ctx is not AIContext context)
+            if (ctx is not AIAgentContext context)
                 return null;
 
-            if (!bInitialized)
-            {
-                GetCollection();
-            }
+            GetCollection();
 
             var closest = this.collection.Closest(context.Agent.transform.position);
             
@@ -40,6 +36,13 @@ namespace HTN.Operators
                 return null;
 
             AITargetType targetType = AITargetType.Object;
+            IHoldable Item = closest as IHoldable;
+            if (Item != null)
+            {
+                targetType = AITargetType.Item;
+                Item.Claim();
+            }
+
             
             return new TransformTarget(closest.transform, targetType);
         }

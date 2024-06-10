@@ -2,7 +2,5 @@
 
 namespace AI.GOAP.WorldKeys
 {
-    public class IsHungry : WorldKeyBase
-    {
-    }
+    public class IsHungry : WorldKeyBase {}
 }

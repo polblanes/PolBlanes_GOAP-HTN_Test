@@ -27,7 +27,7 @@ namespace HTN.Operators
 
         public TaskStatus Update(IContext ctx)
         {
-            if (ctx is not AIContext context)
+            if (ctx is not AIAgentContext context)
                 return TaskStatus.Failure;
 
             if (!bStarted)
@@ -51,7 +51,7 @@ namespace HTN.Operators
             return TaskStatus.Failure;            
         }
 
-        public TaskStatus BeginInteraction(AIContext context)
+        public TaskStatus BeginInteraction(AIAgentContext context)
         {
             var transformTarget = context.CurrentTarget as TransformTarget;
             
@@ -70,7 +70,7 @@ namespace HTN.Operators
 
         public void Stop(IContext ctx)
         {
-            if (ctx is not AIContext context)
+            if (ctx is not AIAgentContext context)
             {
                 Reset();
                 return;

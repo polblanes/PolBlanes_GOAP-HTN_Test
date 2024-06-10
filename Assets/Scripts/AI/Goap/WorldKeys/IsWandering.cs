@@ -2,7 +2,5 @@
 
 namespace AI.GOAP.WorldKeys
 {
-    public class IsWandering : WorldKeyBase
-    {
-    }
+    public class IsWandering : WorldKeyBase {}
 }

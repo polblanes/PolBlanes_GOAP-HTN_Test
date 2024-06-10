@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2644901599046946488}
-  - component: {fileID: 3664022629467210336}
+  - component: {fileID: -8419399369764690119}
   - component: {fileID: 2567974379695048867}
   - component: {fileID: 7347070554750064065}
   - component: {fileID: 7369353940263227564}
@@ -40,7 +40,7 @@ Transform:
   - {fileID: 4661396797160660406}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3664022629467210336
+--- !u!114 &-8419399369764690119
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 31104030825128304}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cef53d855ccf0b46bcf004b27c4a52a, type: 3}
+  m_Script: {fileID: 11500000, guid: 555ee899c6c0c7a46b43142081d5b0de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   goapSetBehaviour: {fileID: 0}
@@ -200,7 +200,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2005979171
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -105014757, guid: 142aa6170bc3def4d8416c097c46b6cb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

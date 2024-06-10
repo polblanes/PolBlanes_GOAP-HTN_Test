@@ -48,7 +48,7 @@ namespace CrashKonijn.Goap.Behaviours
                 this.GoapSet = this.goapSetBehaviour.GoapSet;
         }
 
-        private void Start()
+        protected virtual void Start()
         {
             if (this.GoapSet == null)
                 throw new GoapException($"There is no GoapSet assigned to the agent '{this.name}'! Please assign one in the inspector or through code in the Awake method.");
@@ -240,5 +240,13 @@ namespace CrashKonijn.Goap.Behaviours
         {
             this.DistanceMultiplier = 1f / speed;
         }
+
+        public virtual void OnGoapRunnerNewPlan(List<IActionBase> plan) {}
+
+        public virtual void OnGoapRunnerReplan() {}
+
+        public virtual void OnGoapRunnerGoalComplete() {}
+
+        public virtual void OnGoapRunnerPlanningStarted() {}
     }
 }

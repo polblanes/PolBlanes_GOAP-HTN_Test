@@ -13,6 +13,8 @@ namespace Behaviours.GOAP
         private static readonly Vector2 Bounds = new Vector2(15, 8);
         
         private IGoapRunner goapRunner;
+
+        public int agentAmount;
         
         [SerializeField]
         private GameObject agentPrefab;
@@ -27,7 +29,10 @@ namespace Behaviours.GOAP
 
         private void Start()
         {
-            this.SpawnAgent(SetIds.Survivor, this.agentColor);
+            for (int agentsToSpawn = agentAmount; agentsToSpawn > 0; agentsToSpawn--)
+            {
+                this.SpawnAgent(SetIds.Survivor, this.agentColor);
+            }
         }
 
         private void SpawnAgent(string setId, Color color)

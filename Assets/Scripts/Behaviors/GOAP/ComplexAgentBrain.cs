@@ -63,7 +63,7 @@ namespace Behaviours.GOAP
 
         private void UpdateHunger()
         {
-            if (this.hunger.hunger > 80)
+            if (this.hunger.hunger > 60)
             {
                 this.agent.SetGoal<FixHungerGoal>(false);
                 return;
@@ -100,45 +100,15 @@ namespace Behaviours.GOAP
 
         private void DetermineSurvivorGoals()
         {
-            if (this.inventory.Count<Axe>() == 0 && this.itemCollection.Get<Axe>().Length >= 1)
+            if (this.inventory.Count<Axe>() == 0)
             {
                 this.agent.SetGoal<PickupItemGoal<Axe>>(false);
                 return;
             }
-            
-            if (this.itemCollection.Get<Wood>().Length <= 2)
-            {
-                this.agent.SetGoal<GatherItemGoal<Wood>>(false);
-                return;
-            }
 
-            if (this.inventory.Count<Pickaxe>() == 0 && this.itemCollection.Get<Pickaxe>().Length >= 1)
+            if (this.inventory.Count<Pickaxe>() == 0)
             {
                 this.agent.SetGoal<PickupItemGoal<Pickaxe>>(false);
-                return;
-            }
-            
-            if (this.itemCollection.Get<Iron>().Length <= 2)
-            {
-                this.agent.SetGoal<GatherItemGoal<Iron>>(false);
-                return;
-            }
-
-            if (this.itemCollection.Get<Axe>().Length <= 1)
-            {
-                this.agent.SetGoal<CreateItemGoal<Axe>>(false);
-                return;
-            }
-            
-            if (this.itemCollection.Get<Pickaxe>().Length <= 1)
-            {
-                this.agent.SetGoal<CreateItemGoal<Pickaxe>>(false);
-                return;
-            }
-
-            if (this.itemCollection.Count(false, false) > 0)
-            {
-                this.agent.SetGoal<CleanItemsGoal>(false);
                 return;
             }
             

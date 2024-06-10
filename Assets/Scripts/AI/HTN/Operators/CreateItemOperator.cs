@@ -25,20 +25,44 @@ namespace HTN.Operators
             return agent.transform.position + new Vector3(pos.x, 0f, pos.y);
         }
 
-        private void RemoveRequiredResources(AIContext context)
+        private void RemoveRequiredResources(AIAgentContext context)
         {
-            var iron = context.Agent.Inventory.Get<Iron>().FirstOrDefault();
-            context.Agent.Inventory.Remove(iron);
-            context.Agent.instanceHandler.QueueForDestroy(iron);            
+            int ironToRemove = 0;
+            int woodToRemove = 0;
+
+            if (typeof(TCreatable) == typeof(Axe))
+            {
+                ironToRemove = 1;
+                woodToRemove = 2;
+            }
+            else if (typeof(TCreatable) == typeof(Pickaxe))
+            {
+                ironToRemove = 2;
+                woodToRemove = 1;
+            }
+
+            while (ironToRemove > 0)
+            {
+                var iron = context.Agent.Inventory.Get<Iron>().FirstOrDefault();
+                context.Agent.Inventory.Remove(iron);
+                context.Agent.instanceHandler.QueueForDestroy(iron);
+
+                ironToRemove--;
+            }
             
-            var wood = context.Agent.Inventory.Get<Wood>().FirstOrDefault();
-            context.Agent.Inventory.Remove(wood);
-            context.Agent.instanceHandler.QueueForDestroy(wood);
+            while (woodToRemove > 0)
+            {
+                var wood = context.Agent.Inventory.Get<Wood>().FirstOrDefault();
+                context.Agent.Inventory.Remove(wood);
+                context.Agent.instanceHandler.QueueForDestroy(wood);
+                
+                woodToRemove--;
+            }
         }
 
         public TaskStatus Update(IContext ctx)
         {
-            if (ctx is not AIContext context)
+            if (ctx is not AIAgentContext context)
                 return TaskStatus.Failure;
             
             if (context.Time < context.GenericTimer)
@@ -58,7 +82,7 @@ namespace HTN.Operators
             return TaskStatus.Success;            
         }
 
-        public TaskStatus BeginInteraction(AIContext context)
+        public TaskStatus BeginInteraction(AIAgentContext context)
         {
             var transformTarget = context.CurrentTarget as TransformTarget;
             
@@ -71,7 +95,7 @@ namespace HTN.Operators
 
         public void Stop(IContext ctx)
         {
-            if (ctx is not AIContext context)
+            if (ctx is not AIAgentContext context)
                 return;
             
             context.GenericTimer = -1f;

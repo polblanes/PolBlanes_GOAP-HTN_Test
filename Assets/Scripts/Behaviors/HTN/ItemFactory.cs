@@ -11,7 +11,7 @@ namespace Behaviours.HTN
         
         public List<ItemBase> items = new();
 
-        public Action<Type> OnNewItem;
+        public Action<ItemBase> OnNewItem;
 
         public T Instantiate<T>()
             where T : ItemBase
@@ -31,7 +31,7 @@ namespace Behaviours.HTN
 
             this.count++;
             
-            OnNewItem?.Invoke(typeof(T));
+            OnNewItem?.Invoke(item);
 
             return instance as T;
         }

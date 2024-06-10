@@ -22,7 +22,7 @@ namespace HTN.Operators
 
         private Vector3 GetRandomPosition(IContext ctx)
         {
-            if (ctx is not AIContext context)
+            if (ctx is not AIAgentContext context)
                 return Vector3.zero;
 
             var random =  Random.insideUnitCircle * 5f;

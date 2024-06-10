@@ -16,6 +16,7 @@ using Unity.VisualScripting;
 using Classes.Items.HTN;
 using Classes.Sources.HTN;
 using Interfaces;
+using HTN.PlanningData;
 
 namespace HTN
 {
@@ -30,9 +31,9 @@ namespace HTN
         [SerializeField] [Tooltip("A Transform representing the head of the agent")]
         private Transform _head;
 
-        private Planner<AIContext> _planner;
-        private Domain<AIContext> _domain;
-        private AIContext _context;
+        private Planner<AIAgentContext> _planner;
+        private Domain<AIAgentContext> _domain;
+        private AIAgentContext _context;
         private SensorySystem _sensory;
         private AgentMoveBehaviour _movement;
 
@@ -43,6 +44,7 @@ namespace HTN
         private ItemFactory _itemFactory;
         private ItemCollection _itemCollection;
         private InstanceHandler _instanceHandler;
+        private GlobalItemManager _itemManager;
 
         public ITask CurrentTask { 
             get 
@@ -66,8 +68,22 @@ namespace HTN
         public ItemCollection itemCollection { get => _itemCollection; }
 
         public InstanceHandler instanceHandler { get => _instanceHandler; }
+        
+        public GlobalItemManager itemManager { get => _itemManager; } 
 
         public bool IsMovementEnabled { get => _movement.bShouldMove; }
+
+        public Action<float> OnMainGoalsAchieved;
+        float TimeStart;
+        bool bMainGoalsAchieved = false;
+
+
+        public Action<int, float> OnNewPlan;
+        public Action OnReplan;
+        public Action OnPlanSucceeded;
+
+        bool bHasPlannedBefore = false;
+        float PlanningStartTime;
 
         private void Awake()
         {
@@ -78,8 +94,8 @@ namespace HTN
                 return;
             }
 
-            _planner = new Planner<AIContext>();
-            _context = new AIContext(this, _senses, _head, GetComponent<Animator>(), GetComponent<NavMeshAgent>());
+            _planner = new Planner<AIAgentContext>();
+            _context = new AIAgentContext(this, _senses, _head, GetComponent<Animator>(), GetComponent<NavMeshAgent>());
             _sensory = new SensorySystem(this);
             _movement = this.GetComponent<AgentMoveBehaviour>();
             _inventory = this.GetComponent<ComplexInventoryBehaviour>();
@@ -88,12 +104,26 @@ namespace HTN
             _itemCollection = FindObjectOfType<ItemCollection>();
             _itemFactory = FindObjectOfType<ItemFactory>();
             _instanceHandler = FindObjectOfType<InstanceHandler>();
+            _itemManager = FindObjectOfType<GlobalItemManager>();
+
+            _planner.OnNewPlan += OnPlannerNewPlan;
+            _planner.OnReplacePlan += OnPlannerReplacedPlan;
+
+            PlanningDataGatherer planningDataGatherer = FindObjectOfType<PlanningDataGatherer>();
+            if (planningDataGatherer != null)
+            {
+                planningDataGatherer.AddAgent(this);
+            }
 
             _itemFactory.OnNewItem += OnNewItem;
             _instanceHandler.OnItemDestroyed += OnItemDestroyed;
 
             _inventory.OnItemAdded += OnItemObtained;
             _inventory.OnItemRemoved += OnItemLost;
+
+            _itemManager.OnItemClaimed += OnItemClaimed;
+            _itemManager.OnItemPickedUp += OnItemPickedUp;
+            _itemManager.OnItemDropped += OnItemDropped;
 
             _domain = _domainDefinition.Create();
         }
@@ -110,12 +140,14 @@ namespace HTN
 
             foreach (var item in itemCollection.items)
             {
-                OnNewItem(item.GetType());
+                OnNewItem(item);
             }
             
             _context.SetState(AIWorldState.TreeIsInWorld, TreeSourceInWorld, EffectType.Permanent);
             _context.SetState(AIWorldState.MineIsInWorld, IronMineSourceInWorld, EffectType.Permanent);
             _context.SetState(AIWorldState.AnvilIsInWorld, AnvilSourceInWorld, EffectType.Permanent);
+
+            TimeStart = Time.realtimeSinceStartup;
         }
 
         private void Update()
@@ -140,9 +172,16 @@ namespace HTN
                 _context.SetState(AIWorldState.IsHungry, false, EffectType.Permanent);
             }
 
+            PlanningStartTime = Time.realtimeSinceStartup;
             _planner.Tick(_domain, _context);
 
             LogDecomposition();
+
+            if (!bMainGoalsAchieved && _context.HasState(AIWorldState.HasAxe, true) && _context.HasState(AIWorldState.HasPickaxe, true))
+            {
+                OnMainGoalsAchieved?.Invoke(Time.realtimeSinceStartup - TimeStart);
+                bMainGoalsAchieved = true;
+            }
         }
 
         private void OnDrawGizmos()
@@ -181,13 +220,13 @@ namespace HTN
             {
                 var entry = _context.DecompositionLog.Dequeue();
                 var depth = FluidHTN.Debug.Debug.DepthToString(entry.Depth);
-                Debug.Log($"{depth}{entry.Name}: {entry.Description}");
+                //Debug.Log($"{this.GetInstanceID()} - {depth}{entry.Name}: {entry.Description}");
             }          
         }
 
-        void OnNewItem(Type itemType)
+        void OnNewItem(ItemBase item)
         {
-            _context.IncrementState(AIWorldKeys.IsInWorld(itemType), 1, EffectType.Permanent);
+            _context.IncrementState(AIWorldKeys.IsInWorld(item.GetType()), 1, EffectType.Permanent);
         }
 
         void OnItemObtained(IHoldable item)
@@ -201,6 +240,48 @@ namespace HTN
         void OnItemDestroyed(IHoldable item)
         {
             _context.DecrementState(AIWorldKeys.IsInWorld(item.GetType()), 1, EffectType.Permanent);
+
+            if (item as ItemBase == null)
+                return;
+        }
+
+        void OnItemClaimed(IHoldable item)
+        {
+            _context.DecrementState(AIWorldKeys.IsInWorld(item.GetType()), 1, EffectType.Permanent);
+        }
+
+        void OnItemPickedUp(IHoldable item)
+        {
+            
+        }
+
+        void OnItemDropped(IHoldable item)
+        {
+            _context.IncrementState(AIWorldKeys.IsInWorld(item.GetType()), 1, EffectType.Permanent);
+        }
+
+
+
+        void OnPlannerNewPlan(Queue<ITask> tasks)
+        {
+            if (bHasPlannedBefore)
+            {
+                OnPlanSucceeded?.Invoke();
+            }
+
+            bHasPlannedBefore = true;
+            NewPlan(tasks);
+        }
+
+        void OnPlannerReplacedPlan(Queue<ITask> oldPlan, ITask currentTask, Queue<ITask> newPlan)
+        {
+            OnReplan?.Invoke();
+            NewPlan(newPlan);
+        }
+
+        void NewPlan(Queue<ITask> tasks)
+        {
+            OnNewPlan?.Invoke(tasks.Count, Time.realtimeSinceStartup - PlanningStartTime);
         }
     }
 }

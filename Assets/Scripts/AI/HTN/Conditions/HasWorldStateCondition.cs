@@ -27,7 +27,7 @@ namespace HTN.Conditions
 
         public bool IsValid(IContext ctx)
         {
-            if (ctx is AIContext c)
+            if (ctx is AIAgentContext c)
             {
                 var result = c.HasState(State, Value);
                 if (ctx.LogDecomposition) ctx.Log(Name, $"HasWorldStateCondition.IsValid({State}:{Value}:{result})", ctx.CurrentDecompositionDepth+1, this);

@@ -1,6 +1,7 @@
 ﻿using Interfaces;
 using Unity.VisualScripting;
 using UnityEngine;
+using System;
 
 namespace Behaviours.HTN
 {
@@ -8,6 +9,7 @@ namespace Behaviours.HTN
     {
         private ItemCollection collection;
         private InstanceHandler instanceHandler;
+        private GlobalItemManager itemManager;
         
         [field: SerializeField]
         public bool IsHeld { get; private set; }
@@ -23,10 +25,15 @@ namespace Behaviours.HTN
 
         public string DebugName { get; set; }
 
+        public Action<IHoldable> OnItemClaimed;
+        public Action<IHoldable> OnItemPickedUp;
+        public Action<IHoldable> OnItemDropped;
+
         public void Awake()
         {
             this.collection = FindObjectOfType<ItemCollection>();
             this.instanceHandler = FindObjectOfType<InstanceHandler>();
+            this.itemManager = FindObjectOfType<GlobalItemManager>();
         }
 
         public void Update()
@@ -49,7 +56,11 @@ namespace Behaviours.HTN
 
         public void Claim()
         {
+            if (IsClaimed)
+                return;
+                
             this.IsClaimed = true;
+            itemManager.OnItemClaimed?.Invoke(this);
         }
 
         public void MarkForDestroy()
@@ -68,6 +79,8 @@ namespace Behaviours.HTN
             this.IsInBox = false;
             this.IsClaimed = true;
 
+            itemManager.OnItemPickedUp?.Invoke(this);
+
             if (this == null || this.gameObject == null)
                 return;
             
@@ -82,6 +95,8 @@ namespace Behaviours.HTN
             this.IsHeld = false;
             this.IsInBox = inBox;
             this.IsClaimed = false;
+
+            itemManager.OnItemDropped?.Invoke(this);
             
             foreach (var renderer in this.GetComponentsInChildren<SpriteRenderer>())
             {

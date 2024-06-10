@@ -14,7 +14,7 @@ namespace HTN.Sensors
         public float MeleeRange = 2f;
         public float SqrMeleeRange => MeleeRange * MeleeRange;
 
-        public void DrawGizmos(AIContext context)
+        public void DrawGizmos(AIAgentContext context)
         {
             Gizmos.color = new Color(1f, 0f, 0f, 0.125f);
             Gizmos.DrawSphere(context.Position, EyeSight);

@@ -9,16 +9,13 @@ namespace HTN.Domain
     [CreateAssetMenu(fileName = "SurvivorDomain", menuName = "HTN/Domains/Survivor")]
     public class SurvivorDomainDefinition : AIDomainDefinition
     {
-        public override Domain<AIContext> Create()
+        public override Domain<AIAgentContext> Create()
         {
             return new AIDomainBuilder("Survivor")
                 .Select("Survivor")
                     .SubDomain_Eat()
-                    .SubDomain_CraftAxe()
-                    .SubDomain_CraftPickaxe()
-                    .SubDomain_GatherIronWithPickaxe()
-                    .SubDomain_GatherWoodWithAxe()
-                    .SubDomain_Wander()
+                    .SubDomain_GetAxe()
+                    .SubDomain_GetPickaxe()
                 .End()
                 .Build();
         }
