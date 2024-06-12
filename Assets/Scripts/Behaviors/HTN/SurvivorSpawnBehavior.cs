@@ -37,7 +37,7 @@ namespace Behaviours.HTN
             
             agent.gameObject.SetActive(true);
             
-            agent.gameObject.transform.name = $"{GOAPComplexAgentBrain.AgentType.Survivor} {agent.GetInstanceID()}";
+            agent.gameObject.transform.name = $"Survivor {agent.GetInstanceID()}";
 
             var spriteRenderer = agent.GetComponentInChildren<SpriteRenderer>();
             spriteRenderer.color = color;

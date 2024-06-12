@@ -75,14 +75,6 @@ namespace AI.GOAP.Factories.Extensions
             throw new Exception("No conditions set for this type of item!");
         }
         
-        public static void AddHaulItemAction(this GoapSetBuilder builder)
-        {
-            builder.AddAction<Actions.HaulItem>()
-                .SetTarget<TransformTarget>()
-                .AddEffect<ItemsOnFloor>(EffectType.Decrease)
-                .AddCondition<ItemsOnFloor>(Comparison.GreaterThanOrEqual, 1);
-        }
-        
         public static void AddEatAction(this GoapSetBuilder builder)
         {
             builder.AddAction<Actions.Eat>()

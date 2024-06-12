@@ -25,7 +25,7 @@ namespace GOAP.PlanningData.CSV
             "PlanTime"
         };
 
-#region Interactions
+    #region Interactions
         public static void AppendToMainReport(string AgentID, string TotalPlans, string PlansSucceeded, string Replans, string TimeToMainGoal, int AgentCount)
         {
             Debug.Log($"CSV Append Main - ID: {AgentID}, TP: {TotalPlans}, S: {PlansSucceeded}, R: {Replans}, T: {TimeToMainGoal}");
@@ -70,10 +70,10 @@ namespace GOAP.PlanningData.CSV
                 sw.WriteLine(headersString);
             }
         }
-#endregion
+    #endregion
 
 
-#region Operations
+    #region Operations
         private static string GetStringLineForCSV(string[] strings)
         {
             string finalString = "";
@@ -104,10 +104,10 @@ namespace GOAP.PlanningData.CSV
 
             CreateReport(file, headers);
         }
-#endregion
+    #endregion
 
 
-#region Queries
+    #region Queries
         static bool DoesFileExist(string file)
         {
             return File.Exists(file);
@@ -124,6 +124,6 @@ namespace GOAP.PlanningData.CSV
         {
             return GetDirectoryPath() + "/" + _plansReportFileName + "_" + AgentCount.ToString() + ".csv";
         }
-#endregion
+    #endregion
     }
 }
